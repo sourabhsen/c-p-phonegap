@@ -22,12 +22,16 @@ app.factory('AuthenticationService', AuthenticationService);
                     .then(function (user) {
                        debugger;
                         if (user !== null || user.token) {
-                            response = { success: true };
+                            response = { success: true,auth_token: user.token };
                         } else {
                             response = { success: false, message: 'Username or password is incorrect' };
                         }
                         callback(response);
                     });
+
+
+
+
 
  
             /* Use this for real authentication
@@ -49,24 +53,26 @@ app.factory('AuthenticationService', AuthenticationService);
               })
         }
  
-        function SetCredentials(username, password) {
+        function SetCredentials(username, password,token) {
             var authdata = Base64.encode(username + ':' + password);
+            var entoken  = Base64.encode(token);
  
             $rootScope.globals = {
                 currentUser: {
                     username: username,
-                    authdata: authdata
+                    authdata: authdata,
+                    token: entoken
                 }
             };
  
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; // jshint ignore:line
+            $http.defaults.headers.common['token'] = token; // jshint ignore:line
             $cookieStore.put('globals', $rootScope.globals);
         }
  
         function ClearCredentials() {
             $rootScope.globals = {};
             $cookieStore.remove('globals');
-            $http.defaults.headers.common.Authorization = 'Basic';
+            $http.defaults.headers.common.token = 'Basic';
         }
     }
  

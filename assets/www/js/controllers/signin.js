@@ -19,11 +19,12 @@ app.controller('SigninFormController', ['$scope', '$http', '$state','Authenticat
       
       AuthenticationService.Login($scope.user.email, $scope.user.password, function (response) {
             if (response.success) {
+                  $state.go('app.dashboard-v1');
+                  var pushNotification = window.plugins.pushNotification;
+                      pushNotification.register(cnp.successHandler, cnp.errorHandler,{"senderID":"126143679531","ecb":"cnp.onNotificationGCM"});
 
-                 var pushNotification = window.plugins.pushNotification;
-                     pushNotification.register(cnp.successHandler, cnp.errorHandler,{"senderID":"126143679531","ecb":"cnp.onNotificationGCM"});
-                     AuthenticationService.SetCredentials($scope.user.email, $scope.user.password);
-                     $state.go('app.dashboard-v1');
+                     AuthenticationService.SetCredentials($scope.user.email, $scope.user.password,response.auth_token);
+                     $http.defaults.headers.common['token'] = response.auth_token;
             } else {
                   $scope.authError = response.message;
                   vm.dataLoading = false;

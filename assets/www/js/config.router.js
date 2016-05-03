@@ -13,8 +13,9 @@ angular.module('app')
            // keep user logged in after page refresh
         $rootScope.globals = $cookieStore.get('globals') || {};
         if ($rootScope.globals.currentUser) {
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata; // jshint ignore:line
-            $http.defaults.headers.common['api_key'] = $rootScope.globals.currentUser.auth_token; // jshint ignore:line
+            var detoken = Base64.decode($rootScope.globals.currentUser.token)
+            $http.defaults.headers.common['token'] =  detoken; // jshint ignore:line
+          //  $http.defaults.headers.common['api_key'] = $rootScope.globals.currentUser.auth_token; // jshint ignore:line
         }
 
         $rootScope.$on('$locationChangeStart', function (event, next, current) {
@@ -63,12 +64,22 @@ angular.module('app')
 
               .state('app.store-transactions', {
                   url: '/store',
-                  templateUrl: 'tpl/table_datatable.html'
+                  templateUrl: 'tpl/table_datatable.html',
+                  resolve: load( ['js/controllers/transaction.js'
+                                      ] )
               })
 
                .state('app.business-transactions', {
                   url: '/business',
-                  templateUrl: 'tpl/table_datatable.html'
+                  templateUrl: 'tpl/table_datatable.html',
+                  resolve: load( ['js/controllers/transaction.js'
+                                      ] )
+              })
+
+              .state('lockme', {
+                    url: '/Screen-lock',
+                    templateUrl: 'tpl/page_lockme.html',
+                     resolve: load( ['js/controllers/pagelock.js'] )
               })
 
               // table
