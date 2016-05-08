@@ -3,27 +3,28 @@
 </div>
 <div class="wrapper-md" ng-controller="TransactionController">
   <div class="panel panel-default">
+    <div>{{msg}}</div>
     <div class="panel-heading">
       DataTables
-    </div>
+    </div>{{strTransaction}}
     <div class="table-responsive">
       <table ui-jq="dataTable" ui-options="{
-          sAjaxSource: 'api/datatable.json',
+          sAjaxSource: '[{{strTransaction.storetransactions}}]',
           aoColumns: [
-            { mData: 'engine' },
-            { mData: 'browser' },
-            { mData: 'platform' },
-            { mData: 'version' },
-            { mData: 'grade' }
+            { mData: 'transactionId' },
+            { mData: 'transactionAmount' },
+            { mData: 'transactionDescription' },
+            { mData: 'transactionDate' },
+            { mData: 'transactionStatus' }
           ]
         }" class="table table-striped b-t b-b">
         <thead>
           <tr>
-            <th  style="width:20%">Rendering engine</th>
-            <th  style="width:25%">Browser</th>
-            <th  style="width:25%">Platform(s)</th>
-            <th  style="width:15%">Engine version</th>
-            <th  style="width:15%">CSS grade</th>
+            <th  style="width:20%">transactionId</th>
+            <th  style="width:25%">Amount</th>
+            <th  style="width:25%">Platform</th>
+            <th  style="width:15%">Date</th>
+            <th  style="width:15%">Status</th>
           </tr>
         </thead>
         <tbody>

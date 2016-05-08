@@ -13,11 +13,11 @@ app.factory('environmentUtil', environmentUtil);
          */
         function getUrl()
         {
-            debugger;
-            var url = $location.protocol() + '://' + 'www.clickandpayindia.com'/*$location.host()*/;
+
+            var url = /*$location.protocol() +*/  'http://' + 'www.clickandpayindia.com:8080'/*$location.host()*/;
 
             if ($location.port() !== 80) {
-                url += ':' + $location.port();
+              //  url += ':' + $location.port();
             }
             return url;
         }

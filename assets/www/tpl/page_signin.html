@@ -15,6 +15,16 @@
         <div class="list-group-item">
            <input type="password" placeholder="Password" class="form-control no-border" ng-model="user.password" required>
         </div>
+        <div class="list-group-item">
+          <label>
+            <input type="radio" name="role" value="POS" ng-model="form.role" checked>
+            Pos
+          </label>
+          <label>
+            <input type="radio" name="role" value="MERCHANT" ng-model="form.role">
+            Merchant
+          </label>
+        </div>
       </div>
       <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="login()" ng-disabled='form.$invalid'>Log in</button>
       <div class="text-center m-t m-b"><a ui-sref="access.forgotpwd">Forgot password?</a></div>

@@ -16,18 +16,20 @@ app.factory('AuthenticationService', AuthenticationService);
  
         return service;
  
-        function Login(username, password, callback) {
+        function Login(username, password,role, callback) {
                 var response;
-                UserService.GetByUsername(username,password)
+            $timeout(function(){
+                UserService.GetByUsername(username,password,role)
                     .then(function (user) {
-                       debugger;
+
                         if (user !== null || user.token) {
                             response = { success: true,auth_token: user.token };
                         } else {
                             response = { success: false, message: 'Username or password is incorrect' };
                         }
                         callback(response);
-                    });
+                    })
+                    },1000);
 
 
 

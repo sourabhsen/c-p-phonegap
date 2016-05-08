@@ -8,51 +8,48 @@ app.factory('UserService', UserService);
     UserService.$inject = ['$http','$q','environmentUtil'];
     function UserService($http,$q,environmentUtil) {
         var service = {};
- 
-      
        
         service.GetByUsername = GetByUsername;
         service.GetStoreTransaction = GetStoreTransaction;
         service.GetPasscodeAuthentication = GetPasscodeAuthentication;
-    
- 
+
         return service;
- 
     
-        function GetByUsername(uname,pkey) {
+        function GetByUsername(uname,pkey,role) {
                 var deferredGet = $q.defer();
-                var restUrl = 'http://54.169.220.89:8080/clickandpay/login';
+                var restUrl = '/clickandpay/login';
                 var dataObj = {
                     username: uname,
                     password: pkey,
-                    role: 'POS'
+                    role: role
                 };   
 
                var httpConfig = {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
                     method: 'POST',
                     params: dataObj,
-                    url:  restUrl
+                    url: environmentUtil.getMCAppUrl() + restUrl
                 };
 
               $http(httpConfig).success(function (data) {
                 deferredGet.resolve(data);
-            }).error(function (error) {
+               }).error(function (error) {
                deferredGet.reject(error);
-           });
+              });
 
              return deferredGet.promise;
 
 
         }
 
-        function GetStoreTransaction(){
+        function GetStoreTransaction(data){
                 var deferredStrGet = $q.defer();
-                var restUrl = 'http://54.169.220.89:8080/clickandpay/myacc/storetransactions';
+                var restUrl = '/clickandpay/myacc/storetransactions';
                 var httpConfig = {
                            headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
                            method: 'POST',
-                           url:  restUrl
+                           params:data,
+                           url:  environmentUtil.getMCAppUrl() + restUrl
                        };
 
                    $http(httpConfig).success(function (data) {
@@ -64,14 +61,14 @@ app.factory('UserService', UserService);
                     return deferredStrGet.promise;
         }
 
-        function GetPasscodeAuthentication(passcode){
+        function GetPasscodeAuthentication(data){
                  var deferredStrGet = $q.defer();
-                 var restUrl = 'http://54.169.220.89:8080/clickandpay/myacc/passcode';
+                 var restUrl = '/clickandpay/myacc/passcode';
                  var httpConfig = {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
                             method: 'POST',
-                            params: passcode,
-                            url:  restUrl
+                            params: data,
+                            url:  environmentUtil.getMCAppUrl() + restUrl
                         };
 
                     $http(httpConfig).success(function (data) {
