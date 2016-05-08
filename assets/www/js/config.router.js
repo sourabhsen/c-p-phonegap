@@ -5,15 +5,15 @@
  */
 angular.module('app')
   .run(
-    [          '$rootScope', '$state', '$stateParams','$http','$cookieStore','$location',
-      function ($rootScope,   $state,   $stateParams, $http, $cookieStore, $location) {
+    [          '$rootScope', '$state', '$stateParams','$http','$window','$cookieStore','$location','AuthenticationService',
+      function ($rootScope,   $state,   $stateParams, $http,$window, $cookieStore, $location,AuthenticationService) {
           $rootScope.$state = $state;
           $rootScope.$stateParams = $stateParams;  
-
+          console.log(AuthenticationService);
            // keep user logged in after page refresh
         $rootScope.globals = $cookieStore.get('globals') || {};
         if ($rootScope.globals.currentUser) {
-            var detoken = Base64.decode($rootScope.globals.currentUser.token)
+             var detoken = AuthenticationService.GetToken();
             $http.defaults.headers.common['token'] =  detoken; // jshint ignore:line
           //  $http.defaults.headers.common['api_key'] = $rootScope.globals.currentUser.auth_token; // jshint ignore:line
         }
@@ -22,7 +22,8 @@ angular.module('app')
             // redirect to login page if not logged in and trying to access a restricted page
             var restrictedPage = $.inArray($location.path(), ['/signin', '/signup']) === -1;
             var loggedIn = $rootScope.globals.currentUser;
-            if (restrictedPage && !loggedIn) {
+            var auth_token = $window.sessionStorage.getItem('auth_key') ? $window.sessionStorage.getItem('auth_key'): null;
+            if (restrictedPage && !loggedIn && !auth_token) {
                 $location.path('/access/signin');
             }
         });

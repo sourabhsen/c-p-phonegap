@@ -5,14 +5,17 @@
 
 app.factory('AuthenticationService', AuthenticationService);
 	
-    AuthenticationService.$inject = ['$http','$cookieStore','$rootScope', '$timeout','UserService'];
-    function AuthenticationService($http,$cookieStore,$rootScope, $timeout,UserService) {
+    AuthenticationService.$inject = ['$http','$cookieStore','$rootScope','$window', '$timeout','UserService'];
+    function AuthenticationService($http,$cookieStore,$rootScope,$window, $timeout,UserService) {
         var service = {};
  
         service.Login = Login;
-        service.getToken = getToken;
+        service.GetToken = GetToken;
+        service.GetPushId = GetPushId;
         service.SetCredentials = SetCredentials;
         service.ClearCredentials = ClearCredentials;
+        service.SetToken = SetToken;
+        service.LogOutService = LogOutService;
  
         return service;
  
@@ -45,14 +48,25 @@ app.factory('AuthenticationService', AuthenticationService);
  
         }
 
-        function getToken(){     
-              UserService.GetAuthToken().then(function(data){
-                    $rootScope.globals = {
-                         currentUser: {
-                                auth_token:data.api_key
-                        }
-                };
-              })
+        function GetToken(){
+              var token = $window.sessionStorage.getItem('auth_key');
+              if(token){
+                return Base64.decode(token);
+              }else{
+                 return false;
+              }
+        }
+
+        function GetPushId(){
+          var Reg_id = $window.sessionStorage.getItem('PUSHID');
+              if(Reg_id){
+                console.log('sucessfully push id is stored');
+                return Reg_id;
+              }else{
+                console.log('device is not registered')
+                return false;
+              }
+
         }
  
         function SetCredentials(username, password,token) {
@@ -70,11 +84,28 @@ app.factory('AuthenticationService', AuthenticationService);
             $http.defaults.headers.common['token'] = token; // jshint ignore:line
             $cookieStore.put('globals', $rootScope.globals);
         }
+
+        function SetToken(token){
+           if(token){
+              var deToken = Base64.encode(token);
+              $window.sessionStorage.setItem('auth_key',deToken);
+           }
+        }
  
         function ClearCredentials() {
             $rootScope.globals = {};
             $cookieStore.remove('globals');
+            $window.sessionStorage.clear();
             $http.defaults.headers.common.token = 'Basic';
+        }
+
+        function LogOutService(){
+           UserService.LogOutSession()
+              .then(function (response) {
+                   debugger;
+                   service.clearCredentials();
+               })
+
         }
     }
  

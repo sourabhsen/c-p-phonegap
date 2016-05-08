@@ -12,6 +12,7 @@ app.factory('UserService', UserService);
         service.GetByUsername = GetByUsername;
         service.GetStoreTransaction = GetStoreTransaction;
         service.GetPasscodeAuthentication = GetPasscodeAuthentication;
+        service.LogOutSession = LogOutSession;
 
         return service;
     
@@ -78,6 +79,26 @@ app.factory('UserService', UserService);
                    });
 
                      return deferredStrGet.promise;
+        }
+
+        function LogOutSession(){
+                  var deferredStrGet = $q.defer();
+                  var restUrl = '/clickandpay/myacc/signout';
+                  var httpConfig = {
+                             headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+                             method: 'POST',
+                             url:  environmentUtil.getMCAppUrl() + restUrl
+                         };
+
+                     $http(httpConfig).success(function (data) {
+                         deferredStrGet.resolve(data);
+                     }).error(function (error) {
+                        deferredStrGet.reject(error);
+                    });
+
+                      return deferredStrGet.promise;
+
+
         }
 
         // private functions

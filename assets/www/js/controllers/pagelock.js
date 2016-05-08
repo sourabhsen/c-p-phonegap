@@ -2,17 +2,21 @@
 
 /* Controllers */
   // signin controller
-app.controller('PageLockController', ['$scope', '$http','$window', '$state','UserService', function($scope, $http, $window, $state,UserService) {
+app.controller('PageLockController', ['$scope', '$http','$window', '$state','UserService','AuthenticationService', function($scope, $http, $window, $state,UserService,AuthenticationService) {
 
     $scope.authError = null;
     $scope.userAuthenticate = function(code) {
        $scope.authError = null;
-      // code = parseInt(code);
+
+    var  token_value =  AuthenticationService.GetToken();
+    var  reg_id      =  AuthenticationService.GetPushId();
+             // code = parseInt(code);
        var dataObj = {
           passcode:   code,
           macid : 1234,
           device : 0,
-          token: $window.sessionStorage.getItem('auth_token'),
+          token: token_value,
+          pushid: reg_id,
           ipaddress : '124.122.0.0'
        }
 

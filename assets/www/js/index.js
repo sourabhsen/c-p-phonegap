@@ -52,11 +52,12 @@ var cnp = {
     },
 
     successHandler: function(result) {
-        alert('Callback Success! Result = '+result)
+        console.log('Callback Success! Result = '+result);
+        window.sessionStorage.setItem('PUSHID',result);
     },
 
     errorHandler:function(error) {
-        alert(error);
+        console.log(error);
     },
 
     onNotificationGCM: function(e) {
@@ -66,21 +67,21 @@ var cnp = {
                     if ( e.regid.length > 0 )
                     {
                         console.log("Regid " + e.regid);
-                        alert('registration id = '+e.regid);
+                        console.log('registration id = '+e.regid);
                     }
                 break;
 
                 case 'message':
                   // this is the actual push notification. its format depends on the data model from the push server
-                  alert('message = '+e.message+' msgcnt = '+e.msgcnt);
+                  console.log('message = '+e.message+' msgcnt = '+e.msgcnt);
                 break;
 
                 case 'error':
-                  alert('GCM error = '+e.msg);
+                  console.log('GCM error = '+e.msg);
                 break;
 
                 default:
-                  alert('An unknown GCM event has occurred');
+                  console.log('An unknown GCM event has occurred');
                   break;
             }
         }
