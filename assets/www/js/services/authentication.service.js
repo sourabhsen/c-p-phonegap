@@ -25,10 +25,10 @@ app.factory('AuthenticationService', AuthenticationService);
                 UserService.GetByUsername(username,password,role)
                     .then(function (user) {
 
-                        if (user !== null || user.token) {
+                        if (user !== null && user.token) {
                             response = { success: true,auth_token: user.token };
                         } else {
-                            response = { success: false, message: 'Username or password is incorrect' };
+                            response = { success: false, message: 'Something went wrong please try after sometime' };
                         }
                         callback(response);
                     })
@@ -71,6 +71,7 @@ app.factory('AuthenticationService', AuthenticationService);
  
         function SetCredentials(username, password,token) {
             var authdata = Base64.encode(username + ':' + password);
+            token = token ? token : 'Basic';
             var entoken  = Base64.encode(token);
  
             $rootScope.globals = {
@@ -102,8 +103,10 @@ app.factory('AuthenticationService', AuthenticationService);
         function LogOutService(){
            UserService.LogOutSession()
               .then(function (response) {
-                   debugger;
-                   service.clearCredentials();
+                   $rootScope.globals = {};
+                   $cookieStore.remove('globals');
+                   $window.sessionStorage.clear();
+                   $http.defaults.headers.common.token = 'Basic';
                })
 
         }

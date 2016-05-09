@@ -14,7 +14,7 @@ app.factory('environmentUtil', environmentUtil);
         function getUrl()
         {
 
-            var url = /*$location.protocol() +*/  'http://' + 'www.clickandpayindia.com:8080'/*$location.host()*/;
+            var url = /*$location.protocol() +*/  'http://' + '54.169.220.89:8080'/*$location.host()*/;
 
             if ($location.port() !== 80) {
               //  url += ':' + $location.port();

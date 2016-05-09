@@ -33,8 +33,9 @@ app.controller('SigninFormController', ['$scope', '$http', '$window', '$state','
                  //$state.go('app.dashboard-v1');
 
             } else {
+
                   $scope.authError = response.message;
-                  vm.dataLoading = false;
+
             }
         });
 
