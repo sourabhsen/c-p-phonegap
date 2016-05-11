@@ -21,9 +21,6 @@ app.controller('SigninFormController', ['$scope', '$http', '$window', '$state','
       AuthenticationService.Login($scope.user.email, $scope.user.password,$scope.form.role, function (response) {
             if (response.success) {
 
-              var pushNotification = window.plugins.pushNotification;
-                  pushNotification.register(cnp.successHandler, cnp.errorHandler,{"senderID":"126143679531","ecb":"cnp.onNotificationGCM"});
-
                  AuthenticationService.SetCredentials($scope.user.email, $scope.user.password,response.auth_token);
                  AuthenticationService.SetToken(response.auth_token);
 

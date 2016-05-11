@@ -16,6 +16,8 @@ app.factory('AuthenticationService', AuthenticationService);
         service.ClearCredentials = ClearCredentials;
         service.SetToken = SetToken;
         service.LogOutService = LogOutService;
+        service.AuthenticateDevice = AuthenticateDevice;
+
  
         return service;
  
@@ -58,13 +60,13 @@ app.factory('AuthenticationService', AuthenticationService);
         }
 
         function GetPushId(){
-          var Reg_id = $window.sessionStorage.getItem('PUSHID');
+          var Reg_id = $window.sessionStorage.getItem('PushRegid');
               if(Reg_id){
                 console.log('sucessfully push id is stored');
                 return Reg_id;
               }else{
                 console.log('device is not registered')
-                return false;
+                return null;
               }
 
         }
@@ -109,6 +111,30 @@ app.factory('AuthenticationService', AuthenticationService);
                    $http.defaults.headers.common.token = 'Basic';
                })
 
+        }
+
+        function AuthenticateDevice(){
+               var  isMobile = {
+                   Android: function() {
+                       return navigator.userAgent.match(/Android/i);
+                   },
+                   BlackBerry: function() {
+                       return navigator.userAgent.match(/BlackBerry/i);
+                   },
+                   iOS: function() {
+                       return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+                   },
+                   Opera: function() {
+                       return navigator.userAgent.match(/Opera Mini/i);
+                   },
+                   Windows: function() {
+                       return navigator.userAgent.match(/IEMobile/i);
+                   },
+                   any: function() {
+                       return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+                   }
+               };
+          return isMobile;
         }
     }
  
@@ -193,5 +219,7 @@ app.factory('AuthenticationService', AuthenticationService);
             return output;
         }
     };
+
+
  
 })();

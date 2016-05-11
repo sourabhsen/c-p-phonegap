@@ -10,13 +10,16 @@ app.controller('PageLockController', ['$scope', '$http','$window', '$state','Use
 
     var  token_value =  AuthenticationService.GetToken();
     var  reg_id      =  AuthenticationService.GetPushId();
+    var  pushid      =  AuthenticationService.GetPushId();
+    var  isMobile    =  AuthenticationService.AuthenticateDevice();
+    var   device       = (isMobile.Android()) ? 0 :  1;
              // code = parseInt(code);
        var dataObj = {
           passcode:   code,
           macid : 1234,
-          device : 0,
+          device : device,
           token: token_value,
-          pushid: reg_id,
+          pushid: pushid,
           ipaddress : '124.122.0.0'
        }
 

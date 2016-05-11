@@ -5,12 +5,28 @@
  */
 angular.module('app')
   .run(
-    [          '$rootScope', '$state', '$stateParams','$http','$window','$cookieStore','$location','AuthenticationService',
-      function ($rootScope,   $state,   $stateParams, $http,$window, $cookieStore, $location,AuthenticationService) {
+    [          '$rootScope', '$state', '$stateParams','$http','$window','$cookieStore','$location','AuthenticationService','UserService',
+      function ($rootScope,   $state,   $stateParams, $http,$window, $cookieStore, $location,AuthenticationService,UserService) {
           $rootScope.$state = $state;
           $rootScope.$stateParams = $stateParams;  
           console.log(AuthenticationService);
-           // keep user logged in after page refresh
+
+          var pushId = $window.sessionStorage.getItem('PushRegid');
+          var  isMobile    =  AuthenticationService.AuthenticateDevice();
+          var   device     = (isMobile.Android()) ? 0 :  1;
+          if(pushId){
+
+            var responseData = {
+                  macid : 1234,
+                  device : device,
+                  pushid: pushId
+            }
+            UserService.setPushRegId(responseData).then(function(response){
+              debugger;
+              console.log(response);
+            });
+          }
+        // keep user logged in after page refresh
         $rootScope.globals = $cookieStore.get('globals') || {};
         if ($rootScope.globals.currentUser) {
              var detoken = AuthenticationService.GetToken();
@@ -20,11 +36,16 @@ angular.module('app')
 
         $rootScope.$on('$locationChangeStart', function (event, next, current) {
             // redirect to login page if not logged in and trying to access a restricted page
+            var detoken = AuthenticationService.GetToken();
             var restrictedPage = $.inArray($location.path(), ['/signin', '/signup']) === -1;
             var loggedIn = $rootScope.globals.currentUser;
             var auth_token = $window.sessionStorage.getItem('auth_key') ? $window.sessionStorage.getItem('auth_key'): null;
             if (restrictedPage && !loggedIn && !auth_token) {
                 $location.path('/access/signin');
+            }else{
+               //Temporary code if we are sending token in headerer
+               if(detoken)
+                  $http.defaults.headers.common['token'] =  detoken; // jshint ignore:line
             }
         });
 

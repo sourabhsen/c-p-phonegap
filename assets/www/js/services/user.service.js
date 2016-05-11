@@ -13,6 +13,7 @@ app.factory('UserService', UserService);
         service.GetStoreTransaction = GetStoreTransaction;
         service.GetPasscodeAuthentication = GetPasscodeAuthentication;
         service.LogOutSession = LogOutSession;
+        service.setPushRegId =  setPushRegId;
 
         return service;
     
@@ -97,6 +98,27 @@ app.factory('UserService', UserService);
                     });
 
                       return deferredStrGet.promise;
+
+
+        }
+
+        function setPushRegId(data){
+                var deferredStrGet = $q.defer();
+                var restUrl = '/clickandpay/createpushuser';
+                var httpConfig = {
+                           headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+                           method: 'POST',
+                           params:data,
+                           url:  environmentUtil.getMCAppUrl() + restUrl
+                       };
+
+                   $http(httpConfig).success(function (data) {
+                       deferredStrGet.resolve(data);
+                   }).error(function (error) {
+                      deferredStrGet.reject(error);
+                  });
+
+                    return deferredStrGet.promise;
 
 
         }

@@ -46,9 +46,9 @@ var cnp = {
 
         console.log('Received Event: ' + id);*/
 
+         var pushNotification = window.plugins.pushNotification;
+             pushNotification.register(cnp.successHandler, cnp.errorHandler,{"senderID":"126143679531","ecb":"cnp.onNotificationGCM"});
 
-      //  var pushNotification = window.plugins.pushNotification;
-        // pushNotification.register(cnp.successHandler, cnp.errorHandler,{"senderID":"126143679531","ecb":"cnp.onNotificationGCM"});
     },
 
     successHandler: function(result) {
@@ -68,6 +68,7 @@ var cnp = {
                     {
                         console.log("Regid " + e.regid);
                         console.log('registration id = '+e.regid);
+                        window.sessionStorage.setItem('PushRegid',e.regid);
                     }
                 break;
 

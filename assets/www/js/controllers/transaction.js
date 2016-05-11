@@ -2,12 +2,19 @@
 
 /* Controllers */
   // signin controller
-app.controller('TransactionController', ['$rootScope','$scope','$window', '$http', '$state','$stateParams','UserService', function($rootScope,$scope, $window, $http, $state,$stateParams,UserService) {
+app.controller('TransactionController', ['$rootScope','$scope','$window', '$http', '$state','$stateParams','UserService','AuthenticationService', function($rootScope,$scope, $window, $http, $state,$stateParams,UserService,AuthenticationService) {
 
     $scope.authError = null;
-    var dataObj ={
-       token: $window.sessionStorage.getItem('auth_token'),
+    var detoken = AuthenticationService.GetToken();
+
+    if(detoken){
+       var dataObj = detoken;
+
+    }else{
+       $scope.showError = true;
+       $scope.msg="something went rong";
     }
+
     function init(){
        $scope.getStoreTransaction();
     }
@@ -26,7 +33,7 @@ app.controller('TransactionController', ['$rootScope','$scope','$window', '$http
 
        }
 
-      init();
+     init();
 
   }])
 ;

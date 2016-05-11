@@ -2,8 +2,8 @@
   <h1 class="m-n font-thin h3">Datatable</h1>
 </div>
 <div class="wrapper-md" ng-controller="TransactionController">
-  <div class="panel panel-default">
-    <div>{{msg}}</div>
+
+  <div class="panel panel-default" ng-if="!showError">
     <div class="panel-heading">
       DataTables
     </div>{{strTransaction}}
@@ -32,4 +32,7 @@
       </table>
     </div>
   </div>
+ <div class="wrapper-md" ng-if="showError">
+   <h3>{{msg}}</h3>
+ </div>
 </div>
